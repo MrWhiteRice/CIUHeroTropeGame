@@ -63,17 +63,11 @@ public class Movement : MonoBehaviour
 	{
 		Vector2 pos = transform.position;
 
-		Vector2 direction;
-		if(forward)
-		{
-			direction = Vector2.right;
-		}
-		else
-		{
-			direction = Vector2.left;
-		}
+		Vector2 direction = (forward) ? Vector2.right : Vector2.left;
 
-		if(Physics2D.OverlapBox(pos + (direction * (0.5f)) + (Vector2.up * 0.5f), new Vector2(0.05f, .75f), 0, groundLayer))
+		float length = GetComponent<CircleCollider2D>().radius;
+
+		if(Physics2D.OverlapBox(pos + (direction * (length)) + (Vector2.up * 0.5f), new Vector2(0.05f, .75f), 0, groundLayer))
 		{
 			print("collision");
 			return true;
