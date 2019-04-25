@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
 	Rigidbody2D rb;
 
-	bool movingForward = true;
+	public bool movingForward = true;
 	float speed = 1;
 
 	public GameObject point;
