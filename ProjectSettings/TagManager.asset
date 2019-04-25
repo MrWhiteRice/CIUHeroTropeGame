@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CameraSpawn
   - Respawner
+  - NextLevel
   layers:
   - Default
   - TransparentFX

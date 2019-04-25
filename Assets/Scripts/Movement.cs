@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Movement : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Movement : MonoBehaviour
 	public AudioClip jumpSound;
 	public AudioClip deathSound;
 
+	public GameObject dead;
+
 	SpriteRenderer spr;
 	Rigidbody2D rb;
 
@@ -21,6 +24,7 @@ public class Movement : MonoBehaviour
 	Vector2 lastPos;
 	bool kill;
 	bool jump;
+	bool isJumping;
 	bool movingForward = true;
 
 	private void Start()
@@ -38,8 +42,6 @@ public class Movement : MonoBehaviour
 
 		SpriteDirection();
 
-		CheckKill();
-
 		TryJump();
     }
 
@@ -54,6 +56,13 @@ public class Movement : MonoBehaviour
 
 			jump = false;
 		}
+		else
+		{
+			if(IsGrounded())
+			{
+				isJumping = false;
+			}
+		}
 
 		if(kill)
 		{
@@ -67,9 +76,42 @@ public class Movement : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if(collision.CompareTag("Respawner"))
+		switch(collision.tag)
 		{
-			transform.position = lastPos;
+			case "Respawner":
+				transform.position = lastPos;
+				return;
+			case "NextLevel":
+				SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+				return;
+		}
+
+		if(collision.GetComponent<Enemy>())
+		{
+			//head jump
+			if(direction.y < 0.1f && isJumping)
+			{
+				Destroy(collision.gameObject);
+
+				GameObject jump = new GameObject("Death SFX");
+				jump.AddComponent<AudioSource>().clip = deathSound;
+				jump.GetComponent<AudioSource>().volume = 0.5f;
+				jump.GetComponent<AudioSource>().Play();
+
+				kill = true;
+			}
+			//touching normally
+			else
+			{
+				int dir = collision.GetComponent<Enemy>().movingForward ? -1 : 1;
+
+				GameObject corpse = Instantiate(dead, transform.position, Quaternion.identity);
+				corpse.GetComponentInChildren<SpriteRenderer>().flipX = !collision.GetComponent<Enemy>().movingForward;
+				corpse.GetComponent<Rigidbody2D>().velocity = new Vector2(dir * -10, 10);
+
+				Destroy(this);
+				Destroy(gameObject);
+			}
 		}
 	}
 
@@ -89,32 +131,8 @@ public class Movement : MonoBehaviour
 		jump.AddComponent<AudioSource>().clip = jumpSound;
 		jump.GetComponent<AudioSource>().volume = 0.5f;
 		jump.GetComponent<AudioSource>().Play();
-	}
 
-	void CheckKill()
-	{
-		if(direction.y < 0.1f)
-		{
-			Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.15f);
-
-			foreach(Collider2D hit in hits)
-			{
-				if(hit != null)
-				{
-					if(hit.GetComponent<Enemy>())
-					{
-						Destroy(hit.gameObject);
-
-						GameObject jump = new GameObject("Death SFX");
-						jump.AddComponent<AudioSource>().clip = deathSound;
-						jump.GetComponent<AudioSource>().volume = 0.5f;
-						jump.GetComponent<AudioSource>().Play();
-
-						kill = true;
-					}
-				}
-			}
-		}
+		isJumping = true;
 	}
 
 	bool IsGrounded()
