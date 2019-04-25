@@ -5,14 +5,13 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-	[SerializeField]
-	float speed;
+	public float speed;
+	public float jumpSpeed;
 
-	[SerializeField]
-	float jumpSpeed;
+	public LayerMask groundLayer;
 
-	[SerializeField]
-	LayerMask groundLayer;
+	public AudioClip jumpSound;
+	public AudioClip deathSound;
 
 	SpriteRenderer spr;
 	Rigidbody2D rb;
@@ -37,7 +36,7 @@ public class Movement : MonoBehaviour
 
 		CheckKill();
 
-		Jump();
+		TryJump();
     }
 
 	private void FixedUpdate()
@@ -46,8 +45,7 @@ public class Movement : MonoBehaviour
 		{
 			if(IsGrounded())
 			{
-				direction.y = jumpSpeed;
-				//rb.AddForce((Vector2.up * rb.velocity.y) + (Vector2.up * jumpSpeed));
+				Jump();
 			}
 
 			jump = false;
@@ -55,13 +53,22 @@ public class Movement : MonoBehaviour
 
 		if(kill)
 		{
-			//rb.AddForce((Vector2.up * rb.velocity.y) + (Vector2.up * jumpSpeed));
-			direction.y = jumpSpeed;
+			Jump();
+
 			kill = false;
-			print("asd");
 		}
 
 		rb.velocity = direction;
+	}
+
+	void Jump()
+	{
+		direction.y = jumpSpeed;
+
+		GameObject jump = new GameObject("Jump SFX");
+		jump.AddComponent<AudioSource>().clip = jumpSound;
+		jump.GetComponent<AudioSource>().volume = 0.5f;
+		jump.GetComponent<AudioSource>().Play();
 	}
 
 	void CheckKill()
@@ -77,6 +84,12 @@ public class Movement : MonoBehaviour
 					if(hit.GetComponent<Enemy>())
 					{
 						Destroy(hit.gameObject);
+
+						GameObject jump = new GameObject("Death SFX");
+						jump.AddComponent<AudioSource>().clip = deathSound;
+						jump.GetComponent<AudioSource>().volume = 0.5f;
+						jump.GetComponent<AudioSource>().Play();
+
 						kill = true;
 					}
 				}
@@ -133,7 +146,7 @@ public class Movement : MonoBehaviour
 		spr.flipX = !movingForward;
 	}
 
-	void Jump()
+	void TryJump()
 	{
 		if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W))
 		{

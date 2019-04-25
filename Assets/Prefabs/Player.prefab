@@ -227,3 +227,5 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 512
+  jumpSound: {fileID: 8300000, guid: ae12e4f12b348b340aa81f479f33a1e5, type: 3}
+  deathSound: {fileID: 8300000, guid: 0dc95bb884962e247a0454ae49400c3c, type: 3}

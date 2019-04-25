@@ -38,6 +38,5 @@ public class Parallax : MonoBehaviour
 
 		cam.orthographicSize = 6 + layerInt - 10;
 		cam.depth = -2 - (layerInt - 10);
-		cam.GetComponent<AudioListener>().enabled = false;
     }
 }
