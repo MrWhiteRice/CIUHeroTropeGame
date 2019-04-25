@@ -35,6 +35,8 @@ public class Movement : MonoBehaviour
 		SpriteDirection();
 
 		Jump();
+
+		CheckKill();
     }
 
 	private void FixedUpdate()
@@ -50,6 +52,26 @@ public class Movement : MonoBehaviour
 		}
 
 		rb.velocity = direction;
+	}
+
+	void CheckKill()
+	{
+		if(direction.y < 0.1f)
+		{
+			Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.15f);
+
+			foreach(Collider2D hit in hits)
+			{
+				if(hit != null)
+				{
+					if(hit.GetComponent<Enemy>())
+					{
+						Destroy(hit.gameObject);
+						rb.AddForce((Vector2.up * rb.velocity.y) + (Vector2.up * jumpSpeed));
+					}
+				}
+			}
+		}
 	}
 
 	bool IsGrounded()

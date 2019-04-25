@@ -26,7 +26,6 @@ public class Enemy : MonoBehaviour
 		if(!Physics2D.OverlapCircle(point.transform.position, 0.1f, mask))
 		{
 			movingForward = !movingForward;
-			print("flip!");
 		}
 	}
 
@@ -34,7 +33,6 @@ public class Enemy : MonoBehaviour
 	{
 		Vector2 velo = rb.velocity;
 		velo.x = CheckDir() * speed;
-		print(velo.x);
 
 		rb.velocity = velo;
 	}
