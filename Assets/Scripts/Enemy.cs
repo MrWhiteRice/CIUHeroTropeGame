@@ -27,6 +27,9 @@ public class Enemy : MonoBehaviour
 		{
 			movingForward = !movingForward;
 		}
+
+		int flip = movingForward ? -1 : 1;
+		transform.GetChild(0).localScale = new Vector2(1 * flip, 1);
 	}
 
 	void FixedUpdate()

@@ -5,17 +5,18 @@ using UnityEngine;
 public class AnimDetection : MonoBehaviour
 {
 	Animator anim;
+	Rigidbody2D rb;
 
     void Start()
     {
 		anim = GetComponent<Animator>();
+		rb = GetComponentInParent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-		float hor = Mathf.Abs(Input.GetAxisRaw("Horizontal"));
-
+		float hor = Mathf.Abs(rb.velocity.x);
 		anim.SetFloat("horizontalSpeed", hor);
     }
 }
