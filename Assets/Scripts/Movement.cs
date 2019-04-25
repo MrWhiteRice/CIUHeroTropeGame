@@ -43,6 +43,8 @@ public class Movement : MonoBehaviour
 		SpriteDirection();
 
 		TryJump();
+
+		TryReset();
     }
 
 	private void FixedUpdate()
@@ -112,6 +114,14 @@ public class Movement : MonoBehaviour
 				Destroy(this);
 				Destroy(gameObject);
 			}
+		}
+	}
+
+	void TryReset()
+	{
+		if(Input.GetKeyDown(KeyCode.R))
+		{
+			transform.position = lastPos;
 		}
 	}
 
