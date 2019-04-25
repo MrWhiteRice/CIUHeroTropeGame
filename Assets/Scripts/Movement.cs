@@ -39,12 +39,16 @@ public class Movement : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		if(jump && IsGrounded())
+		if(jump)
 		{
-			rb.AddForce((Vector2.up * rb.velocity.y) + (Vector2.up * jumpSpeed));
+			if(IsGrounded())
+			{
+				rb.AddForce((Vector2.up * rb.velocity.y) + (Vector2.up * jumpSpeed));
+			}
+
 			jump = false;
 		}
-		
+
 		rb.velocity = direction;
 	}
 
@@ -52,24 +56,22 @@ public class Movement : MonoBehaviour
 	{
 		if(Physics2D.OverlapCircle(transform.position, 0.15f, groundLayer))
 		{
-			print("collider");
 			return true;
 		}
 
 		return false;
 	}
 
-	bool CheckCollision(bool forward)
+	bool CheckCollision()
 	{
 		Vector2 pos = transform.position;
 
-		Vector2 direction = (forward) ? Vector2.right : Vector2.left;
+		Vector2 direction = movingForward ? Vector2.right : Vector2.left;
 
 		float length = GetComponent<CircleCollider2D>().radius;
 
-		if(Physics2D.OverlapBox(pos + (direction * (length)) + (Vector2.up * 0.5f), new Vector2(0.05f, .75f), 0, groundLayer))
+		if(Physics2D.OverlapBox(pos + (direction * (length)) + (Vector2.up * 0.5f), new Vector2(0.05f, .5f), 0, groundLayer))
 		{
-			print("collision");
 			return true;
 		}
 
@@ -78,30 +80,20 @@ public class Movement : MonoBehaviour
 
 	void Move()
 	{
+		direction = rb.velocity;
 		float x = Input.GetAxisRaw("Horizontal");
 
 		direction.x = 0;
 
-		if(x > 0)
+		if(x != 0)
 		{
-			movingForward = true;
-
-			if(!CheckCollision(true))
-			{
-				direction.x = x * speed;
-			}
+			movingForward = x > 0 ? true : false;
 		}
-		else if(x < 0)
+
+		if(!CheckCollision())
 		{
-			movingForward = false;
-
-			if(!CheckCollision(false))
-			{
-				direction.x = x * speed;
-			}
+			direction.x = x * speed;
 		}
-		
-		direction.y = rb.velocity.y;
 	}
 
 	void SpriteDirection()
