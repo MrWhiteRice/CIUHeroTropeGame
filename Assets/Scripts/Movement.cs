@@ -19,6 +19,7 @@ public class Movement : MonoBehaviour
 
 	Vector2 direction;
 
+	bool kill;
 	bool jump;
 	bool movingForward = true;
 
@@ -34,6 +35,7 @@ public class Movement : MonoBehaviour
 
 		SpriteDirection();
 
+		CheckKill();
 
 		Jump();
     }
@@ -44,13 +46,21 @@ public class Movement : MonoBehaviour
 		{
 			if(IsGrounded())
 			{
-				rb.AddForce((Vector2.up * rb.velocity.y) + (Vector2.up * jumpSpeed));
+				direction.y = jumpSpeed;
+				//rb.AddForce((Vector2.up * rb.velocity.y) + (Vector2.up * jumpSpeed));
 			}
 
 			jump = false;
 		}
 
-		CheckKill();
+		if(kill)
+		{
+			//rb.AddForce((Vector2.up * rb.velocity.y) + (Vector2.up * jumpSpeed));
+			direction.y = jumpSpeed;
+			kill = false;
+			print("asd");
+		}
+
 		rb.velocity = direction;
 	}
 
@@ -67,8 +77,7 @@ public class Movement : MonoBehaviour
 					if(hit.GetComponent<Enemy>())
 					{
 						Destroy(hit.gameObject);
-						direction.y = 0;
-						rb.AddForce((Vector2.up * rb.velocity.y) + (Vector2.up * jumpSpeed));
+						kill = true;
 					}
 				}
 			}
