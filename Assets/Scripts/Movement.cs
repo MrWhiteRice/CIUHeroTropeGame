@@ -18,18 +18,22 @@ public class Movement : MonoBehaviour
 
 	Vector2 direction;
 
+	Vector2 lastPos;
 	bool kill;
 	bool jump;
 	bool movingForward = true;
 
 	private void Start()
 	{
+		lastPos = transform.position;
 		spr = GetComponentInChildren<SpriteRenderer>();
 		rb = GetComponent<Rigidbody2D>();
 	}
 
 	void Update()
     {
+		LastPos();
+
 		Move();
 
 		SpriteDirection();
@@ -59,6 +63,22 @@ public class Movement : MonoBehaviour
 		}
 
 		rb.velocity = direction;
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if(collision.CompareTag("Respawner"))
+		{
+			transform.position = lastPos;
+		}
+	}
+
+	void LastPos()
+	{
+		if(Physics2D.Raycast(transform.position, Vector2.down, 0.1f, groundLayer))
+		{
+			lastPos = transform.position;
+		}
 	}
 
 	void Jump()

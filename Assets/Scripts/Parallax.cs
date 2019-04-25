@@ -22,10 +22,8 @@ public class Parallax : MonoBehaviour
 
 		cam = Instantiate(GameObject.FindGameObjectWithTag("CameraSpawn").GetComponent<Camera>(), main.transform);
 
-		print("layer " + layerInt);
 		if(layerInt-10 == 3)
 		{
-			print("asd");
 			cam.clearFlags = CameraClearFlags.SolidColor;
 		}
 		else
