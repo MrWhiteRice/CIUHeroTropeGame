@@ -34,9 +34,8 @@ public class Movement : MonoBehaviour
 
 		SpriteDirection();
 
-		Jump();
 
-		CheckKill();
+		Jump();
     }
 
 	private void FixedUpdate()
@@ -51,6 +50,7 @@ public class Movement : MonoBehaviour
 			jump = false;
 		}
 
+		CheckKill();
 		rb.velocity = direction;
 	}
 
@@ -67,6 +67,7 @@ public class Movement : MonoBehaviour
 					if(hit.GetComponent<Enemy>())
 					{
 						Destroy(hit.gameObject);
+						direction.y = 0;
 						rb.AddForce((Vector2.up * rb.velocity.y) + (Vector2.up * jumpSpeed));
 					}
 				}
