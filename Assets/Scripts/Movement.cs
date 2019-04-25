@@ -89,7 +89,7 @@ public class Movement : MonoBehaviour
 		if(collision.GetComponent<Enemy>())
 		{
 			//head jump
-			if(direction.y < 0.1f && isJumping)
+			if(direction.y < 0.0f)
 			{
 				Destroy(collision.gameObject);
 
