@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Movement : MonoBehaviour
 {
@@ -67,9 +68,14 @@ public class Movement : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if(collision.CompareTag("Respawner"))
+		switch(collision.tag)
 		{
-			transform.position = lastPos;
+			case "Respawner":
+				transform.position = lastPos;
+				break;
+			case "NextLevel":
+				SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+				break;
 		}
 	}
 
