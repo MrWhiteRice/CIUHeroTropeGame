@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - CameraSpawn
   layers:
   - Default
   - TransparentFX
@@ -15,10 +16,10 @@ TagManager:
   - 
   - PostProcessing
   - Ground
-  - Background
-  - 
-  - 
-  - 
+  - P Layer 1
+  - P Layer 2
+  - P Layer 3
+  - P Layer 4
   - 
   - 
   - 
