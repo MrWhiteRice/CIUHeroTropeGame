@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class QuitGame : MonoBehaviour
 {
-	private void OnEnable()
+	float yeet = 0;
+
+	private void Update()
 	{
-		Application.Quit();
+		yeet += Time.deltaTime;
+
+		if(yeet > 1)
+		{
+			Application.Quit();
+		}
 	}
 }
